@@ -49,11 +49,21 @@ class Payload implements \Serializable
             "access_token" => $this->accessToken,
         );
 
-        return $this->utilities->serializeForRollbar($result, null, $objectHashes, $maxDepth);
+        return $this->utilities::serializeForRollbar($result, null, $objectHashes, $maxDepth);
     }
     
     public function unserialize($serialized)
     {
         throw new \Exception('Not implemented yet.');
+    }
+
+    public function __serialize(): array
+    {
+        return $this->serialize();
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->unserialize($data);
     }
 }

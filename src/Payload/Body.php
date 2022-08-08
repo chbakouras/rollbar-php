@@ -49,7 +49,7 @@ class Body implements \Serializable
         
         $objectHashes = \Rollbar\Utilities::getObjectHashes();
         
-        return $this->utilities->serializeForRollbar(
+        return $this->utilities::serializeForRollbar(
             $result,
             array('extra'),
             $objectHashes
@@ -59,5 +59,15 @@ class Body implements \Serializable
     public function unserialize($serialized)
     {
         throw new \Exception('Not implemented yet.');
+    }
+
+    public function __serialize(): array
+    {
+        return $this->serialize();
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->unserialize($data);
     }
 }

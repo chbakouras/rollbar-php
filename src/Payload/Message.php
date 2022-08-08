@@ -48,11 +48,21 @@ class Message implements ContentInterface
             "body" => $this->getBody(),
             "backtrace" => $this->getBacktrace()
         );
-        return $this->utilities->serializeForRollbar($toSerialize);
+        return $this->utilities::serializeForRollbar($toSerialize);
     }
     
     public function unserialize($serialized)
     {
         throw new \Exception('Not implemented yet.');
+    }
+
+    public function __serialize(): array
+    {
+        return $this->serialize();
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->unserialize($data);
     }
 }

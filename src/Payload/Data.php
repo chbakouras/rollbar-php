@@ -253,11 +253,21 @@ class Data implements \Serializable
         
         $objectHashes = \Rollbar\Utilities::getObjectHashes();
         
-        return $this->utilities->serializeForRollbar($result, null, $objectHashes);
+        return $this->utilities::serializeForRollbar($result, null, $objectHashes);
     }
     
     public function unserialize($serialized)
     {
         throw new \Exception('Not implemented yet.');
+    }
+
+    public function __serialize(): array
+    {
+        return $this->serialize();
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->unserialize($data);
     }
 }

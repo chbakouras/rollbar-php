@@ -17,7 +17,7 @@ class AgentSender implements SenderInterface
         $this->agentLogLocation = \Rollbar\Defaults::get()->agentLogLocation();
         $this->utilities = new \Rollbar\Utilities();
         if (array_key_exists('agentLogLocation', $opts)) {
-            $this->utilities->validateString($opts['agentLogLocation'], 'opts["agentLogLocation"]', null, false);
+            $this->utilities::validateString($opts['agentLogLocation'], 'opts["agentLogLocation"]', null, false);
             $this->agentLogLocation = $opts['agentLogLocation'];
         }
     }

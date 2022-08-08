@@ -32,11 +32,11 @@ class CurlSender implements SenderInterface
             $opts['endpoint'] = $_ENV['ROLLBAR_ENDPOINT'];
         }
         if (array_key_exists('endpoint', $opts)) {
-            $this->utilities->validateString($opts['endpoint'], 'opts["endpoint"]', null, false);
+            $this->utilities::validateString($opts['endpoint'], 'opts["endpoint"]', null, false);
             $this->endpoint = $opts['endpoint'];
         }
         if (array_key_exists('timeout', $opts)) {
-            $this->utilities->validateInteger($opts['timeout'], 'opts["timeout"]', 0, null, false);
+            $this->utilities::validateInteger($opts['timeout'], 'opts["timeout"]', 0, null, false);
             $this->timeout = $opts['timeout'];
         }
         if (array_key_exists('proxy', $opts)) {
@@ -44,7 +44,7 @@ class CurlSender implements SenderInterface
         }
 
         if (array_key_exists('verifyPeer', $opts)) {
-            $this->utilities->validateBoolean($opts['verifyPeer'], 'opts["verifyPeer"]', false);
+            $this->utilities::validateBoolean($opts['verifyPeer'], 'opts["verifyPeer"]', false);
             $this->verifyPeer = $opts['verifyPeer'];
         }
         if (array_key_exists('ca_cert_path', $opts)) {

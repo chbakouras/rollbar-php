@@ -46,11 +46,21 @@ class Trace implements ContentInterface
             "frames" => $this->frames,
             "exception" => $this->exception,
         );
-        return $this->utilities->serializeForRollbar($result);
+        return $this->utilities::serializeForRollbar($result);
     }
     
     public function unserialize($serialized)
     {
         throw new \Exception('Not implemented yet.');
+    }
+
+    public function __serialize(): array
+    {
+        return $this->serialize();
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->unserialize($data);
     }
 }
