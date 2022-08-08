@@ -1,10 +1,9 @@
 <?php namespace Rollbar;
 
+use Exception;
 use Psr\Log\AbstractLogger;
 use Rollbar\Payload\Payload;
-use Rollbar\Payload\Level;
 use Rollbar\Truncation\Truncation;
-use Monolog\Logger as MonologLogger;
 use Rollbar\Payload\EncodedPayload;
 
 class RollbarLogger extends AbstractLogger
@@ -25,12 +24,12 @@ class RollbarLogger extends AbstractLogger
     
     public function enable()
     {
-        return $this->config->enable();
+        $this->config->enable();
     }
     
     public function disable()
     {
-        return $this->config->disable();
+        $this->config->disable();
     }
     
     public function enabled()
@@ -117,8 +116,7 @@ class RollbarLogger extends AbstractLogger
             $this->verboseLogger()->error('Occurrence rejected by the SDK: ' . $response);
         } elseif ($response->getStatus() >= 400) {
             $info = $response->getInfo();
-            $this->verboseLogger()->error('Occurrence rejected by the API: ' . (isset($info['message']) ?
-                    $info['message'] : 'mesage not set'));
+            $this->verboseLogger()->error('Occurrence rejected by the API: ' . ($info['message'] ?? 'mesage not set'));
         } else {
             $this->verboseLogger()->info('Occurrence successfully logged');
         }
@@ -157,7 +155,7 @@ class RollbarLogger extends AbstractLogger
         return count($this->queue);
     }
 
-    protected function send(\Rollbar\Payload\EncodedPayload $payload, $accessToken)
+    protected function send(EncodedPayload $payload, $accessToken)
     {
         if ($this->reportCount >= $this->config->getMaxItems()) {
             $response = new Response(
@@ -228,17 +226,18 @@ class RollbarLogger extends AbstractLogger
     }
     
     /**
-     * @param \Rollbar\Payload\EncodedPayload $payload
-     * @return \Rollbar\Payload\EncodedPayload
+     * @param EncodedPayload $payload
+     * @return EncodedPayload
      */
-    protected function truncate(\Rollbar\Payload\EncodedPayload &$payload)
+    protected function truncate(EncodedPayload $payload)
     {
         return $this->truncation->truncate($payload);
     }
-    
+
     /**
      * @param array &$payload
-     * @return \Rollbar\Payload\EncodedPayload
+     * @return EncodedPayload
+     * @throws Exception
      */
     protected function encode(array &$payload)
     {

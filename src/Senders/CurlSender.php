@@ -5,9 +5,10 @@
  * https://github.com/segmentio/analytics-php/blob/master/lib/Segment/Consumer/Socket.php
  */
 
+use Rollbar\Defaults;
 use Rollbar\Response;
-use Rollbar\Payload\Payload;
 use Rollbar\Payload\EncodedPayload;
+use Rollbar\Utilities;
 
 class CurlSender implements SenderInterface
 {
@@ -24,10 +25,10 @@ class CurlSender implements SenderInterface
 
     public function __construct($opts)
     {
-        $this->endpoint = \Rollbar\Defaults::get()->endpoint() . 'item/';
-        $this->timeout = \Rollbar\Defaults::get()->timeout();
+        $this->endpoint = Defaults::get()->endpoint() . 'item/';
+        $this->timeout = Defaults::get()->timeout();
         
-        $this->utilities = new \Rollbar\Utilities();
+        $this->utilities = new Utilities();
         if (isset($_ENV['ROLLBAR_ENDPOINT']) && !isset($opts['endpoint'])) {
             $opts['endpoint'] = $_ENV['ROLLBAR_ENDPOINT'];
         }

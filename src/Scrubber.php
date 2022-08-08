@@ -15,9 +15,9 @@ class Scrubber implements ScrubberInterface
 
     protected function setScrubFields($config)
     {
-        $fromConfig = isset($config['scrubFields']) ? $config['scrubFields'] : null;
+        $fromConfig = $config['scrubFields'] ?? null;
         if (!isset($fromConfig)) {
-            $fromConfig = isset($config['scrub_fields']) ? $config['scrub_fields'] : null;
+            $fromConfig = $config['scrub_fields'] ?? null;
         }
         $this->scrubFields = self::$defaults->scrubFields($fromConfig);
     }
@@ -29,11 +29,11 @@ class Scrubber implements ScrubberInterface
 
     protected function setWhitelist($config)
     {
-        $fromConfig = isset($config['scrubWhitelist']) ? $config['scrubWhitelist'] : null;
+        $fromConfig = $config['scrubWhitelist'] ?? null;
         if (!isset($fromConfig)) {
-            $fromConfig = isset($config['scrub_whitelist']) ? $config['scrub_whitelist'] : null;
+            $fromConfig = $config['scrub_whitelist'] ?? null;
         }
-        $this->whitelist = $fromConfig ? $fromConfig : array();
+        $this->whitelist = $fromConfig ?: array();
     }
 
     public function getWhitelist()

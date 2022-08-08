@@ -1,6 +1,5 @@
 <?php namespace Rollbar;
 
-use Monolog\Logger;
 use Rollbar\Payload\Notifier;
 use Psr\Log\LogLevel;
 

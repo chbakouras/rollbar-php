@@ -1,6 +1,6 @@
 <?php namespace Rollbar\Truncation;
 
-use \Rollbar\Payload\EncodedPayload;
+use Rollbar\Payload\EncodedPayload;
 
 class FramesStrategy extends AbstractStrategy
 {

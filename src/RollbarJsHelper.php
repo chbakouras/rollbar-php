@@ -1,5 +1,7 @@
 <?php namespace Rollbar;
 
+use Exception;
+
 class RollbarJsHelper
 {
 
@@ -30,8 +32,7 @@ class RollbarJsHelper
         $nonce = null,
         $customJs = ""
     ) {
-        $helper = new self($config);
-        return $helper->addJs($headers, $nonce, $customJs);
+        return (new self($config))->addJs($headers, $nonce, $customJs);
     }
     
     /**
@@ -42,7 +43,7 @@ class RollbarJsHelper
      * headers_list() used to verify if nonce should be added to script
      * tags based on Content-Security-Policy
      * @param string $nonce Content-Security-Policy nonce string if exists
-     * @param strong $customJs Additional JavaScript to add at the end of
+     * @param string $customJs Additional JavaScript to add at the end of
      * RollbarJs snippet
      *
      * @return string
@@ -164,7 +165,7 @@ class RollbarJsHelper
     {
         if ($headers !== null && $this->shouldAppendNonce($headers)) {
             if (!$nonce) {
-                throw new \Exception(
+                throw new Exception(
                     'Content-Security-Policy is script-src '.
                     'inline-unsafe but nonce value not provided.'
                 );

@@ -12,8 +12,6 @@ use Rollbar\Payload\Trace;
 use Rollbar\Payload\Frame;
 use Rollbar\Payload\TraceChain;
 use Rollbar\Payload\ExceptionInfo;
-use Rollbar\Rollbar;
-use Rollbar\Exceptions\PersonFuncException;
 
 class DataBuilder implements DataBuilderInterface
 {
@@ -112,100 +110,100 @@ class DataBuilder implements DataBuilderInterface
 
     protected function setCaptureIP($config)
     {
-        $fromConfig = isset($config['capture_ip']) ? $config['capture_ip'] : null;
+        $fromConfig = $config['capture_ip'] ?? null;
         $this->captureIP = self::$defaults->captureIP($fromConfig);
     }
     
     protected function setCaptureEmail($config)
     {
-        $fromConfig = isset($config['capture_email']) ? $config['capture_email'] : null;
+        $fromConfig = $config['capture_email'] ?? null;
         $this->captureEmail = self::$defaults->captureEmail($fromConfig);
     }
     
     protected function setCaptureUsername($config)
     {
-        $fromConfig = isset($config['capture_username']) ? $config['capture_username'] : null;
+        $fromConfig = $config['capture_username'] ?? null;
         $this->captureUsername = self::$defaults->captureUsername($fromConfig);
     }
 
     protected function setEnvironment($config)
     {
-        $fromConfig = isset($config['environment']) ? $config['environment'] : self::$defaults->get()->environment();
+        $fromConfig = $config['environment'] ?? self::$defaults::get()->environment();
         $this->utilities::validateString($fromConfig, "config['environment']", null, false);
         $this->environment = $fromConfig;
     }
 
     protected function setDefaultMessageLevel($config)
     {
-        $fromConfig = isset($config['messageLevel']) ? $config['messageLevel'] : null;
+        $fromConfig = $config['messageLevel'] ?? null;
         $this->messageLevel = self::$defaults->messageLevel($fromConfig);
     }
 
     protected function setDefaultExceptionLevel($config)
     {
-        $fromConfig = isset($config['exceptionLevel']) ? $config['exceptionLevel'] : null;
+        $fromConfig = $config['exceptionLevel'] ?? null;
         $this->exceptionLevel = self::$defaults->exceptionLevel($fromConfig);
     }
 
     protected function setDefaultPsrLevels($config)
     {
-        $fromConfig = isset($config['psrLevels']) ? $config['psrLevels'] : null;
+        $fromConfig = $config['psrLevels'] ?? null;
         $this->psrLevels = self::$defaults->psrLevels($fromConfig);
     }
 
     protected function setErrorLevels($config)
     {
-        $fromConfig = isset($config['errorLevels']) ? $config['errorLevels'] : null;
+        $fromConfig = $config['errorLevels'] ?? null;
         $this->errorLevels = self::$defaults->errorLevels($fromConfig);
     }
 
     protected function setSendMessageTrace($config)
     {
-        $fromConfig = isset($config['send_message_trace']) ? $config['send_message_trace'] : null;
+        $fromConfig = $config['send_message_trace'] ?? null;
         $this->sendMessageTrace = self::$defaults->sendMessageTrace($fromConfig);
     }
     
     protected function setRawRequestBody($config)
     {
-        $fromConfig = isset($config['include_raw_request_body']) ? $config['include_raw_request_body'] : null;
+        $fromConfig = $config['include_raw_request_body'] ?? null;
         $this->rawRequestBody = self::$defaults->rawRequestBody($fromConfig);
     }
 
     protected function setLocalVarsDump($config)
     {
-        $fromConfig = isset($config['local_vars_dump']) ? $config['local_vars_dump'] : null;
+        $fromConfig = $config['local_vars_dump'] ?? null;
         $this->localVarsDump = self::$defaults->localVarsDump($fromConfig);
     }
     
     protected function setCaptureErrorStacktraces($config)
     {
-        $fromConfig = isset($config['capture_error_stacktraces']) ? $config['capture_error_stacktraces'] : null;
+        $fromConfig = $config['capture_error_stacktraces'] ?? null;
         $this->captureErrorStacktraces = self::$defaults->captureErrorStacktraces($fromConfig);
     }
 
     protected function setCodeVersion($config)
     {
-        $fromConfig = isset($config['codeVersion']) ? $config['codeVersion'] : null;
+        $fromConfig = $config['codeVersion'] ?? null;
         if (!isset($fromConfig)) {
-            $fromConfig = isset($config['code_version']) ? $config['code_version'] : null;
+            $fromConfig = $config['code_version'] ?? null;
         }
         $this->codeVersion = self::$defaults->codeVersion($fromConfig);
     }
 
     protected function setPlatform($config)
     {
-        $fromConfig = isset($config['platform']) ? $config['platform'] : null;
+        $fromConfig = $config['platform'] ?? null;
         $this->platform = self::$defaults->platform($fromConfig);
     }
 
     protected function setFramework($config)
     {
-        $this->framework = isset($config['framework']) ? $config['framework'] : null;
+        $this->framework = $config['framework'] ?? null;
     }
 
     protected function setContext($config)
     {
-        $this->context = isset($config['context']) ? $config['context'] : null;
+        $this->context = $config['context'] ?? null;
     }
 
     protected function setRequestParams($config)

@@ -27,7 +27,7 @@ class ErrorWrapper extends \Exception
                 E_USER_DEPRECATED => "E_USER_DEPRECATED"
             );
         }
-        return isset(self::$constName[$const]) ? self::$constName[$const] : null;
+        return self::$constName[$const] ?? null;
     }
 
     public $errorLevel;

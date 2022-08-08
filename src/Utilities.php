@@ -1,5 +1,7 @@
 <?php namespace Rollbar;
 
+use InvalidArgumentException;
+
 final class Utilities
 {
     private static $ObjectHashes;
@@ -11,7 +13,7 @@ final class Utilities
     
     public static function isWindows()
     {
-        return php_uname('s') == 'Windows NT';
+        return php_uname('s') === 'Windows NT';
     }
 
     public static function validateString(
@@ -22,16 +24,16 @@ final class Utilities
     ) {
         if (is_null($input)) {
             if (!$allowNull) {
-                throw new \InvalidArgumentException("\$$name must not be null");
+                throw new InvalidArgumentException("\$$name must not be null");
             }
             return;
         }
 
         if (!is_string($input)) {
-            throw new \InvalidArgumentException("\$$name must be a string");
+            throw new InvalidArgumentException("\$$name must be a string");
         }
         if (!is_null($len) && strlen($input) != $len) {
-            throw new \InvalidArgumentException("\$$name must be $len characters long, was '$input'");
+            throw new InvalidArgumentException("\$$name must be $len characters long, was '$input'");
         }
     }
 
@@ -42,13 +44,13 @@ final class Utilities
     ) {
         if (is_null($input)) {
             if (!$allowNull) {
-                throw new \InvalidArgumentException("\$$name must not be null");
+                throw new InvalidArgumentException("\$$name must not be null");
             }
             return;
         }
 
         if (!is_bool($input)) {
-            throw new \InvalidArgumentException("\$$name must be a boolean");
+            throw new InvalidArgumentException("\$$name must be a boolean");
         }
     }
 
@@ -61,19 +63,19 @@ final class Utilities
     ) {
         if (is_null($input)) {
             if (!$allowNull) {
-                throw new \InvalidArgumentException("\$$name must not be null");
+                throw new InvalidArgumentException("\$$name must not be null");
             }
             return;
         }
 
         if (!is_integer($input)) {
-            throw new \InvalidArgumentException("\$$name must be an integer");
+            throw new InvalidArgumentException("\$$name must be an integer");
         }
         if (!is_null($minValue) && $input < $minValue) {
-            throw new \InvalidArgumentException("\$$name must be >= $minValue");
+            throw new InvalidArgumentException("\$$name must be >= $minValue");
         }
         if (!is_null($maxValue) && $input > $maxValue) {
-            throw new \InvalidArgumentException("\$$name must be <= $maxValue");
+            throw new InvalidArgumentException("\$$name must be <= $maxValue");
         }
     }
 

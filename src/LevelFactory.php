@@ -35,7 +35,7 @@ class LevelFactory
     {
         self::init();
         $name = strtolower($name);
-        return array_key_exists($name, self::$values) ? self::$values[$name] : null;
+        return self::$values[$name] ?? null;
     }
     
     /**
@@ -47,6 +47,6 @@ class LevelFactory
      */
     public function isValidLevel($level)
     {
-        return $this->fromName($level) ? true : false;
+        return (bool)$this->fromName($level);
     }
 }

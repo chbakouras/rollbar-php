@@ -1,7 +1,7 @@
 <?php namespace Rollbar\Truncation;
 
-use \Rollbar\Payload\EncodedPayload;
-use \Rollbar\Config;
+use Rollbar\Payload\EncodedPayload;
+use Rollbar\Config;
 
 class Truncation
 {
