@@ -65,10 +65,9 @@ class Config
         'minimum_level',
         'verbose',
         'verbose_logger',
-        'raise_on_error',
-        'transformer',
+        'raise_on_error'
     );
-    
+
     private $accessToken;
     /**
      * @var boolean $enabled If this is false then do absolutely nothing,
@@ -129,17 +128,17 @@ class Config
      */
     private $dataBuilder;
     private $configArray;
-    
+
     /**
      * @var LevelFactory
      */
     private $levelFactory;
-    
+
     /**
      * @var Utilities
      */
     private $utilities;
-    
+
     /**
      * @var TransformerInterface
      */
@@ -148,12 +147,12 @@ class Config
      * @var FilterInterface
      */
     private $filter;
-    
+
     /**
      * @var int
      */
     private $minimumLevel;
-    
+
     /**
      * @var ResponseHandlerInterface
      */
@@ -174,13 +173,13 @@ class Config
     private $maxNestingDepth = 10;
 
     private $custom = array();
-    
+
     /**
      * @var callable with parameters $toLog, $contextDataMethodContext. The return
      * value of the callable will be appended to the custom field of the item.
      */
     private $customDataMethod;
-    
+
     /**
      * @var callable
      */
@@ -191,27 +190,27 @@ class Config
 
     private $includedErrno;
     private $useErrorReporting = false;
-    
+
     /**
      * @var boolean Should debug_backtrace() data be sent with string messages
      * sent through RollbarLogger::log().
      */
     private $sendMessageTrace = false;
-    
+
     /**
      * @var string (fully qualified class name) The name of the your custom
      * truncation strategy class. The class should inherit from
      * Rollbar\Truncation\AbstractStrategy.
      */
     private $customTruncation;
-    
+
     /**
      * @var boolean Should the SDK raise an exception after logging an error.
      * This is useful in test and development enviroments.
      * https://github.com/rollbar/rollbar-php/issues/448
      */
     private $raiseOnError = false;
-    
+
     /**
      * @var int The maximum number of items reported to Rollbar within one
      * request.
@@ -221,17 +220,17 @@ class Config
     public function __construct(array $configArray)
     {
         $this->includedErrno = \Rollbar\Defaults::get()->includedErrno();
-        
+
         $this->levelFactory = new LevelFactory();
         $this->utilities = new Utilities();
-        
+
         $this->updateConfig($configArray);
 
         $this->errorSampleRates = \Rollbar\Defaults::get()->errorSampleRates();
         if (isset($configArray['error_sample_rates'])) {
             $this->errorSampleRates = $configArray['error_sample_rates'];
         }
-        
+
         $this->exceptionSampleRates = \Rollbar\Defaults::get()->exceptionSampleRates();
         if (isset($configArray['exception_sample_rates'])) {
             $this->exceptionSampleRates = $configArray['exception_sample_rates'];
@@ -252,7 +251,7 @@ class Config
         }
         $this->mtRandmax = mt_getrandmax();
     }
-    
+
     public static function listOptions()
     {
         return self::$options;
@@ -308,16 +307,16 @@ class Config
         if (isset($config['use_error_reporting'])) {
             $this->useErrorReporting = $config['use_error_reporting'];
         }
-        
+
         $this->maxItems = \Rollbar\Defaults::get()->maxItems();
         if (isset($config['max_items'])) {
             $this->maxItems = $config['max_items'];
         }
-        
+
         if (isset($config['custom_truncation'])) {
             $this->customTruncation = $config['custom_truncation'];
         }
-        
+
         $this->customDataMethod = \Rollbar\Defaults::get()->customDataMethod();
         if (isset($config['custom_data_method'])) {
             $this->customDataMethod = $config['custom_data_method'];
@@ -329,7 +328,7 @@ class Config
         if (isset($_ENV['ROLLBAR_ACCESS_TOKEN']) && !isset($config['access_token'])) {
             $config['access_token'] = $_ENV['ROLLBAR_ACCESS_TOKEN'];
         }
-        $this->utilities::validateString($config['access_token'], "config['access_token']", 32, false);
+        $this->utilities->validateString($config['access_token'], "config['access_token']", 32, false);
         $this->accessToken = $config['access_token'];
     }
 
@@ -365,7 +364,7 @@ class Config
         $this->logPayloadLogger = isset($config['log_payload_logger']) ?
             $config['log_payload_logger'] :
             new \Monolog\Logger('rollbar.payload', array(new \Monolog\Handler\ErrorLogHandler()));
-        
+
         if (!($this->logPayloadLogger instanceof \Psr\Log\LoggerInterface)) {
             throw new \Exception('Log Payload Logger must implement \Psr\Log\LoggerInterface');
         }
@@ -387,17 +386,17 @@ class Config
             $handler->setLevel($this->verboseInteger());
             $this->verboseLogger = new \Monolog\Logger('rollbar.verbose', array($handler));
         }
-        
+
         if (!($this->verboseLogger instanceof \Psr\Log\LoggerInterface)) {
             throw new \Exception('Verbose logger must implement \Psr\Log\LoggerInterface');
         }
     }
-    
+
     public function enable()
     {
         $this->enabled = true;
     }
-    
+
     public function disable()
     {
         $this->enabled = false;
@@ -408,11 +407,11 @@ class Config
         if (!isset($config['levelFactory'])) {
             $config['levelFactory'] = $this->levelFactory;
         }
-        
+
         if (!isset($config['utilities'])) {
             $config['utilities'] = $this->utilities;
         }
-        
+
         $exp = "Rollbar\DataBuilderInterface";
         $def = "Rollbar\DataBuilder";
         $this->setupWithOptions($config, "dataBuilder", $exp, $def, true);
@@ -427,10 +426,10 @@ class Config
     private function setMinimumLevel($config)
     {
         $this->minimumLevel = \Rollbar\Defaults::get()->minimumLevel();
-        
+
         $override = array_key_exists('minimum_level', $config) ? $config['minimum_level'] : null;
         $override = array_key_exists('minimumLevel', $config) ? $config['minimumLevel'] : $override;
-        
+
         if ($override instanceof Level) {
             $this->minimumLevel = $override->toInt();
         } elseif (is_string($override)) {
@@ -449,7 +448,7 @@ class Config
         if (!isset($this->reportSuppressed)) {
             $this->reportSuppressed = isset($config['report_suppressed']) && $config['report_suppressed'];
         }
-        
+
         if (!isset($this->reportSuppressed)) {
             $this->reportSuppressed = \Rollbar\Defaults::get()->reportSuppressed();
         }
@@ -463,7 +462,7 @@ class Config
     private function setSender($config)
     {
         $expected = "Rollbar\Senders\SenderInterface";
-        
+
         $default = "Rollbar\Senders\CurlSender";
 
         $this->setTransportOptions($config);
@@ -486,7 +485,7 @@ class Config
             $this->batched = $config['batched'];
         }
     }
-    
+
     private function setRaiseOnError($config)
     {
         if (array_key_exists('raise_on_error', $config)) {
@@ -514,12 +513,12 @@ class Config
     {
         $this->dataBuilder->setCustom($config);
     }
-    
+
     public function addCustom($key, $data)
     {
         $this->dataBuilder->addCustom($key, $data);
     }
-    
+
     public function removeCustom($key)
     {
         $this->dataBuilder->removeCustom($key);
@@ -547,22 +546,22 @@ class Config
         }
         return \Monolog\Logger::toMonologLevel($this->verbose);
     }
-    
+
     public function getCustom()
     {
         return $this->dataBuilder->getCustom();
     }
-    
+
     public function getAllowedCircularReferenceTypes()
     {
         return $this->allowedCircularReferenceTypes;
     }
-    
+
     public function setCustomTruncation($type)
     {
         $this->customTruncation = $type;
     }
-    
+
     public function getCustomTruncation()
     {
         return $this->customTruncation;
@@ -638,7 +637,7 @@ class Config
         if (isset($config['checkIgnore'])) {
             $this->checkIgnore = $config['checkIgnore'];
         }
-        
+
         if (isset($config['check_ignore'])) {
             $this->checkIgnore = $config['check_ignore'];
         }
@@ -699,8 +698,8 @@ class Config
                 $options = $config;
             } else {
                 $options = isset($config[$keyName . "Options"]) ?
-                            $config[$keyName . "Options"] :
-                            array();
+                    $config[$keyName . "Options"] :
+                    array();
             }
             $this->$keyName = new $class($options);
         } else {
@@ -733,12 +732,12 @@ class Config
     {
         return $this->dataBuilder;
     }
-    
+
     public function getLevelFactory()
     {
         return $this->levelFactory;
     }
-    
+
     public function getSender()
     {
         return $this->sender;
@@ -763,7 +762,7 @@ class Config
     {
         return $this->maxNestingDepth;
     }
-    
+
     public function getMaxItems()
     {
         return $this->maxItems;
@@ -773,7 +772,7 @@ class Config
     {
         return $this->minimumLevel;
     }
-    
+
     public function getRaiseOnError()
     {
         return $this->raiseOnError;
@@ -814,7 +813,7 @@ class Config
     {
         return $this->enabled === true;
     }
-    
+
     public function disabled()
     {
         return !$this->enabled();
@@ -840,7 +839,7 @@ class Config
                 $this->checkIgnore = null;
             }
         }
-        
+
         if ($this->payloadLevelTooLow($payload)) {
             $this->verboseLogger()->debug("Occurrence's level is too low");
             return true;
@@ -870,11 +869,11 @@ class Config
         if ($toLog instanceof ErrorWrapper) {
             return $this->shouldIgnoreErrorWrapper($toLog);
         }
-        
+
         if ($toLog instanceof \Exception) {
             return $this->shouldIgnoreException($toLog);
         }
-        
+
         return false;
     }
 
@@ -910,7 +909,7 @@ class Config
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -926,7 +925,7 @@ class Config
     {
         return $this->shouldIgnoreError($toLog->errorLevel);
     }
-    
+
     /**
      * Check if the exception should be ignored due to configured exception
      * sample rates.
@@ -945,10 +944,10 @@ class Config
             $this->verboseLogger()->debug("Skip exception due to exception sample rating");
             return true;
         }
-        
+
         return false;
     }
-    
+
     /**
      * Calculate what's the chance of logging this exception according to
      * exception sampling.
@@ -963,22 +962,22 @@ class Config
         if (count($this->exceptionSampleRates) == 0) {
             return $sampleRate;
         }
-        
+
         $exceptionClasses = array();
-        
+
         $class = get_class($toLog);
         while ($class) {
             $exceptionClasses []= $class;
             $class = get_parent_class($class);
         }
         $exceptionClasses = array_reverse($exceptionClasses);
-        
+
         foreach ($exceptionClasses as $exceptionClass) {
             if (isset($this->exceptionSampleRates["$exceptionClass"])) {
                 $sampleRate = $this->exceptionSampleRates["$exceptionClass"];
             }
         }
-        
+
         return $sampleRate;
     }
 
